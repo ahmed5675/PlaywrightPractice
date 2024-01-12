@@ -1,10 +1,10 @@
 
 // @ts-check
-const { test, expect, selectors } = require('@playwright/test');
+const { test, expect, selectors,request } = require('@playwright/test');
 const { chromium } = require('playwright');
 const { LoginWholesaler, LogoutWholesaler } = require('./ProductSearchAPI.spec.js');
 let webContext;
-
+let SearchResultPayload=''
 
 
 test.beforeAll(async ({browser}) => {
@@ -26,9 +26,11 @@ test.beforeAll(async ({browser}) => {
 
 test('100 Products', async ({}) => {
     
-    const page= await webContext.newPage()
+    const page= await webContext.newPage();
+    await page.goto('https://paramount.visualr.dev/beer/');
+    const apiContext= await request.newContext();
+     await apiContext.get('https://paramount.visualr.dev/graphql-product');
 
- await page.goto('https://paramount.visualr.dev/beer/')   
     
     const SearchField = page.locator('.form-control');
     const ProdCard1=page.locator('.product-grid__title');
